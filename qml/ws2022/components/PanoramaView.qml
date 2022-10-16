@@ -5,15 +5,18 @@ Item {
 
     property string imageSource
     property real contentX
-    property real zoomFactor
+    property real zoomFactor: 1.0
+    property real maxScrollWidth: image.width * 5 // 1 center element and 2 for buffer left and right
 
     Flickable {
         id: flickable
 
         anchors.fill: parent
 
+        clip: true
+
         contentX: d.initialViewBufferWidth + leftBuffer.width
-        contentWidth: image.width * 20
+        contentWidth: root.maxScrollWidth
         contentHeight: row.height
 
         onContentXChanged: {
@@ -24,8 +27,9 @@ Item {
                 console.log("left end")
                 d.viewBufferWidth -= image.width
             }
-            dani
         }
+
+        onMovementEnded: d.recenterContent()
 
         Row {
             id: row
@@ -33,7 +37,7 @@ Item {
             Item {
                 id: viewBuffer
 
-                height: root.height
+                height: 1
                 width: d.viewBufferWidth
             }
 
@@ -41,7 +45,7 @@ Item {
                 id: leftBuffer
 
                 height: image.height
-                width: root.width * 1.5
+                width: Math.ceil(root.width * 1.2)
 
                 clip: true
 
@@ -79,7 +83,7 @@ Item {
                 id: rightBuffer
 
                 height: image.height
-                width: root.width * 1.5
+                width: Math.ceil(root.width * 1.2)
 
                 clip: true
 
@@ -96,8 +100,15 @@ Item {
 
     QtObject {
         id: d
-        readonly property real initialViewBufferWidth: flickable.contentWidth / 2
+
+        readonly property int initialViewBufferWidth: flickable.contentWidth / 2
         property real viewBufferWidth: initialViewBufferWidth
         property real contentX: 0
+
+        function recenterContent() {
+            console.log("recentering panoramaview...")
+            flickable.contentX = flickable.contentX - d.viewBufferWidth + initialViewBufferWidth
+            viewBufferWidth = initialViewBufferWidth
+        }
     }
 }
