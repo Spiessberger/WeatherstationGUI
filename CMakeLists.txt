@@ -16,6 +16,8 @@ qt_add_qml_module(appWeatherstationGUI
     VERSION 1.0
     QML_FILES
         qml/main.qml
+        qml/ws2022/components/qmldir
+        qml/ws2022/components/PanoramaView.qml
 )
 
 target_link_libraries(appWeatherstationGUI
@@ -24,3 +26,8 @@ target_link_libraries(appWeatherstationGUI
 install(TARGETS appWeatherstationGUI
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+set(QML_IMPORT_PATH "${CMAKE_CURRENT_SOURCE_DIR}/qml"
+    CACHE STRING "Qt Creator extra qml import paths"
+    FORCE
+)
