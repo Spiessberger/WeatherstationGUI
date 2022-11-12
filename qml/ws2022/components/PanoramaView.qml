@@ -4,9 +4,20 @@ Item {
     id: root
 
     property string imageSource
-    property real contentX
+    property int scrollDuration: 60000
     property real zoomFactor: 1.0
     property real maxScrollWidth: image.width * 5 // 1 center element and 2 for buffer left and right
+    readonly property real imageWidth: image.width
+
+    onScrollDurationChanged: d.startScrollingAnimation()
+
+
+    Timer {
+        id: scrollingTimer
+
+        interval: 2000
+        onTriggered: d.startScrollingAnimation()
+    }
 
     Flickable {
         id: flickable
@@ -21,15 +32,33 @@ Item {
 
         onContentXChanged: {
             if (contentX > viewBuffer.width + leftBuffer.width + image.width) {
-                console.log("rigth end")
                 d.viewBufferWidth += image.width
             } else if (contentX < viewBuffer.width + leftBuffer.width) {
-                console.log("left end")
                 d.viewBufferWidth -= image.width
             }
         }
 
-        onMovementEnded: d.recenterContent()
+        onDragStarted: {
+            scrollingTimer.stop()
+            scrollingAnimation.stop()
+        }
+
+        onMovementEnded: {
+            d.recenterContent()
+            scrollingTimer.start()
+        }
+
+        NumberAnimation on contentX {
+            id: scrollingAnimation
+
+            onFinished: {
+                duration = root.scrollDuration
+                from = d.initialViewBufferWidth + leftBuffer.width
+                to = scrollingAnimation.from + image.width
+
+                start()
+            }
+        }
 
         Row {
             id: row
@@ -109,6 +138,26 @@ Item {
             console.log("recentering panoramaview...")
             flickable.contentX = flickable.contentX - d.viewBufferWidth + initialViewBufferWidth
             viewBufferWidth = initialViewBufferWidth
+        }
+
+        function startScrollingAnimation(fromBeginning) {
+            recenterContent()
+
+            if (fromBeginning) {
+
+            }
+
+            var start = d.initialViewBufferWidth + leftBuffer.width
+            var end = scrollingAnimation.from + image.width
+
+            var pos = flickable.contentX - start
+            var endPos = end - start
+
+            scrollingAnimation.duration = root.scrollDuration * (1 - pos / endPos)
+            scrollingAnimation.from = flickable.contentX
+            scrollingAnimation.to = start + image.width
+
+            scrollingAnimation.start()
         }
     }
 }
