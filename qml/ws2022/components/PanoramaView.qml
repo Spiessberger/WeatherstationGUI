@@ -5,18 +5,17 @@ Item {
 
     property string imageSource
     property int scrollDuration: 60000
-    property real zoomFactor: 1.0
     property real maxScrollWidth: image.width * 5 // 1 center element and 2 for buffer left and right
     readonly property real imageWidth: image.width
 
-    onScrollDurationChanged: d.startScrollingAnimation()
+    onScrollDurationChanged: d.startScrollingAnimation(false)
 
 
     Timer {
         id: scrollingTimer
 
         interval: 2000
-        onTriggered: d.startScrollingAnimation()
+        onTriggered: d.startScrollingAnimation(false)
     }
 
     Flickable {
@@ -51,13 +50,7 @@ Item {
         NumberAnimation on contentX {
             id: scrollingAnimation
 
-            onFinished: {
-                duration = root.scrollDuration
-                from = d.initialViewBufferWidth + leftBuffer.width
-                to = scrollingAnimation.from + image.width
-
-                start()
-            }
+            onFinished: d.startScrollingAnimation(true)
         }
 
         Row {
@@ -140,22 +133,21 @@ Item {
             viewBufferWidth = initialViewBufferWidth
         }
 
-        function startScrollingAnimation(fromBeginning) {
+        function startScrollingAnimation(fromBeginning: bool) {
             recenterContent()
 
-            if (fromBeginning) {
+            var duration = root.scrollDuration
+            var start = start = d.initialViewBufferWidth + leftBuffer.width
+            var end = start + image.width
 
+            if (!fromBeginning) {
+                duration = root.scrollDuration * (1 - (flickable.contentX - start) / (end - start));
+                start = flickable.contentX
             }
 
-            var start = d.initialViewBufferWidth + leftBuffer.width
-            var end = scrollingAnimation.from + image.width
-
-            var pos = flickable.contentX - start
-            var endPos = end - start
-
-            scrollingAnimation.duration = root.scrollDuration * (1 - pos / endPos)
-            scrollingAnimation.from = flickable.contentX
-            scrollingAnimation.to = start + image.width
+            scrollingAnimation.duration = duration
+            scrollingAnimation.from = start
+            scrollingAnimation.to = end
 
             scrollingAnimation.start()
         }
