@@ -10,7 +10,6 @@ Item {
 
     onScrollDurationChanged: d.startScrollingAnimation(false)
 
-
     Timer {
         id: scrollingTimer
 

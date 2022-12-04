@@ -16,7 +16,6 @@ qt_add_qml_module(appWeatherstationGUI
     VERSION 1.0
     QML_FILES
         qml/main.qml
-        qml/ws2022/components/qmldir
         qml/ws2022/components/PanoramaView.qml
 )
 
