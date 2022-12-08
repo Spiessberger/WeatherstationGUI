@@ -1,5 +1,5 @@
 import QtQuick
-import ws2022.components
+import WeatherstationGUI
 
 Window {
     width: 640
@@ -10,6 +10,15 @@ Window {
     PanoramaView {
         anchors.fill: parent
 
-        imageSource: "file:C:/Users/Daniel/Downloads/recent_hd.jpg"
+        imageSource: PanomaxImageProvider.liveImageId
+                     > 0 ? "image://panomax/" + PanomaxImageProvider.liveImageId : ""
+    }
+
+    Connections {
+        target: PanomaxImageProvider.liveImageDownload
+
+        function onProgressChanged() {
+            console.log(PanomaxImageProvider.liveImageDownload.progress)
+        }
     }
 }

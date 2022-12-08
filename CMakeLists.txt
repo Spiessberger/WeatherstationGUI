@@ -17,7 +17,14 @@ qt_add_qml_module(appWeatherstationGUI
     QML_FILES
         qml/main.qml
         qml/ws2022/components/PanoramaView.qml
+    SOURCES
+        src/panomaximageprovider.h
+        src/panomaximageprovider.cpp
+        src/qmldownload.h
+        src/qmldownload.cpp
 )
+
+include_directories(src)
 
 target_link_libraries(appWeatherstationGUI
     PRIVATE Qt6::Quick)

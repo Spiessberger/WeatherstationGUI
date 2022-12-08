@@ -4,6 +4,10 @@
 #include <QDebug>
 #include <QDir>
 
+#include "panomaximageprovider.h"
+
+using namespace std::chrono_literals;
+
 void dumpFileTree(const QDir &dir, int indent) {
     const auto fiList = dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files | QDir::Dirs);
     for (const auto &fi : fiList) {
@@ -27,6 +31,15 @@ int main(int argc, char *argv[]) {
         },
         Qt::QueuedConnection);
     engine.addImportPath(":/WeatherstationGUI/qml");
+
+    // dumpFileTree({":"}, 0);
+
+    auto panomaxProvider = new PanomaxImageProvider("", 10min);
+
+    qmlRegisterSingletonInstance<PanomaxImageProvider>("WeatherstationGUI", 1, 0,
+                                                       "PanomaxImageProvider", panomaxProvider);
+    engine.addImageProvider("panomax", panomaxProvider);
+
     engine.load(url);
 
     return app.exec();

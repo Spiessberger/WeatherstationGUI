@@ -5,7 +5,8 @@ Item {
 
     property string imageSource
     property int scrollDuration: 60000
-    property real maxScrollWidth: image.width * 5 // 1 center element and 2 for buffer left and right
+    property real maxScrollWidth: image.width
+                                  * 5 // 1 center element and 2 for buffer left and right
     readonly property real imageWidth: image.width
 
     onScrollDurationChanged: d.startScrollingAnimation(false)
@@ -14,7 +15,7 @@ Item {
         id: scrollingTimer
 
         interval: 2000
-        onTriggered: d.startScrollingAnimation(false)
+        onTriggered: console.log("triggered")
     }
 
     Flickable {
@@ -50,6 +51,8 @@ Item {
             id: scrollingAnimation
 
             onFinished: d.startScrollingAnimation(true)
+            onRunningChanged: console.log("running: " + running)
+            running: false
         }
 
         Row {
@@ -98,6 +101,13 @@ Item {
                     width: 2
                     color: "red"
                 }
+
+                onStatusChanged: {
+                    if (image.status === Image.Ready
+                            && !scrollingAnimation.running) {
+                        d.startScrollingAnimation(false)
+                    }
+                }
             }
 
             Item {
@@ -132,15 +142,19 @@ Item {
             viewBufferWidth = initialViewBufferWidth
         }
 
-        function startScrollingAnimation(fromBeginning: bool) {
+        function startScrollingAnimation(fromBeginning) {
+            if (image.status != Image.Ready) {
+                return
+            }
+
             recenterContent()
 
             var duration = root.scrollDuration
             var start = start = d.initialViewBufferWidth + leftBuffer.width
             var end = start + image.width
 
-            if (!fromBeginning) {
-                duration = root.scrollDuration * (1 - (flickable.contentX - start) / (end - start));
+            if (!fromBeginning && end != start) {
+                duration = root.scrollDuration * (1 - (flickable.contentX - start) / (end - start))
                 start = flickable.contentX
             }
 
