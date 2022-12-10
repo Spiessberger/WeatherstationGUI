@@ -35,18 +35,19 @@ QPixmap PanomaxImageProvider::requestPixmap(const QString &id, QSize *size,
 }
 
 void PanomaxImageProvider::downloadLiveImage() {
+    qDebug() << "downloading live image...";
     auto reply = m_netManager.get(QNetworkRequest(QUrl(m_baseUrl + "recent_default.jpg")));
 
-    if (m_liveImageDownload != nullptr && m_liveImageDownload->status() != QmlDownload::Finished) {
+    if (m_liveImageDownload != nullptr && m_liveImageDownload->status() != DownloadProxy::Finished) {
         m_liveImageDownload->abort();
     }
-    m_liveImageDownload = std::make_unique<QmlDownload>(++m_id, reply, this);
+    m_liveImageDownload = std::make_unique<DownloadProxy>(++m_id, reply, this);
     emit liveImageDownloadChanged();
     connect(reply, &QNetworkReply::finished, this,
             [=]() { downloadFinished(m_liveImageDownload.get(), reply); });
 }
 
-void PanomaxImageProvider::downloadFinished(QmlDownload *download, QNetworkReply *reply) {
+void PanomaxImageProvider::downloadFinished(DownloadProxy *download, QNetworkReply *reply) {
     qDebug() << __func__ << reply;
 
     if (reply->error() == QNetworkReply::NoError) {
@@ -67,4 +68,4 @@ void PanomaxImageProvider::downloadFinished(QmlDownload *download, QNetworkReply
 
 size_t PanomaxImageProvider::liveImageId() const { return m_liveImageId; }
 
-QmlDownload *PanomaxImageProvider::liveImageDownload() const { return m_liveImageDownload.get(); }
+DownloadProxy *PanomaxImageProvider::liveImageDownload() const { return m_liveImageDownload.get(); }

@@ -5,13 +5,13 @@
 #include <QQuickImageProvider>
 #include <QTimer>
 
-#include "qmldownload.h"
+#include "downloadproxy.h"
 
 class PanomaxImageProvider : public QQuickImageProvider {
 
     Q_PROPERTY(size_t liveImageId READ liveImageId NOTIFY liveImageIdChanged)
     Q_PROPERTY(
-        QmlDownload *liveImageDownload READ liveImageDownload NOTIFY liveImageDownloadChanged)
+        DownloadProxy *liveImageDownload READ liveImageDownload NOTIFY liveImageDownloadChanged)
 
     Q_OBJECT
   public:
@@ -21,7 +21,7 @@ class PanomaxImageProvider : public QQuickImageProvider {
 
     size_t liveImageId() const;
 
-    QmlDownload *liveImageDownload() const;
+    DownloadProxy *liveImageDownload() const;
 
   signals:
     void liveImageIdChanged();
@@ -30,7 +30,7 @@ class PanomaxImageProvider : public QQuickImageProvider {
 
   private:
     void downloadLiveImage();
-    void downloadFinished(QmlDownload *download, QNetworkReply *reply);
+    void downloadFinished(DownloadProxy *download, QNetworkReply *reply);
 
     size_t m_id = 0;
     size_t m_liveImageId = 0;
@@ -38,7 +38,7 @@ class PanomaxImageProvider : public QQuickImageProvider {
     QTimer m_liveImageTimer;
     QNetworkAccessManager m_netManager;
     QPixmap m_liveImage;
-    std::unique_ptr<QmlDownload> m_liveImageDownload;
+    std::unique_ptr<DownloadProxy> m_liveImageDownload;
 };
 
 #endif // PANOMAXIMAGEPROVIDER_H

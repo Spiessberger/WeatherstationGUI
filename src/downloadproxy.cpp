@@ -1,21 +1,22 @@
-#include "qmldownload.h"
+#include "downloadproxy.h"
 
 #include <QNetworkReply>
 #include <QQmlEngine>
 
 namespace {
 void initQml() {
-    qmlRegisterUncreatableType<QmlDownload>("WeatherstationGUI", 1, 0, "Download",
-                                            "Downloads are created only in C++");
+    qmlRegisterUncreatableType<DownloadProxy>(
+        "WeatherstationGUI", 1, 0, "Download",
+        "Download is just a Proxy Class abstracting Dowbloads from C++ in QML");
 }
 Q_CONSTRUCTOR_FUNCTION(initQml);
 } // namespace
 
-QmlDownload::QmlDownload(int id, QNetworkReply *networkReply, QObject *parent)
+DownloadProxy::DownloadProxy(int id, QNetworkReply *networkReply, QObject *parent)
     : QObject{parent}, m_id(id), m_networkReply(networkReply) {
     Q_ASSERT(networkReply != nullptr);
     Q_ASSERT(networkReply->operation() == QNetworkAccessManager::GetOperation);
-    connect(networkReply, &QNetworkReply::downloadProgress, this, &QmlDownload::downloadProgress);
+    connect(networkReply, &QNetworkReply::downloadProgress, this, &DownloadProxy::downloadProgress);
     connect(networkReply, &QNetworkReply::finished, this, [=]() {
         if (networkReply->error() == QNetworkReply::NoError) {
             m_status = Status::Finished;
@@ -33,21 +34,21 @@ QmlDownload::QmlDownload(int id, QNetworkReply *networkReply, QObject *parent)
     }
 }
 
-int QmlDownload::id() const { return m_id; }
+int DownloadProxy::id() const { return m_id; }
 
-qreal QmlDownload::progress() const { return m_progress; }
+qreal DownloadProxy::progress() const { return m_progress; }
 
-void QmlDownload::abort() {
+void DownloadProxy::abort() {
     if (!m_networkReply.isNull()) {
         m_networkReply->abort();
     }
 }
 
-void QmlDownload::downloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
+void DownloadProxy::downloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
     if (bytesTotal > 0) {
         m_progress = qreal(bytesReceived) / bytesTotal;
         emit progressChanged();
     }
 }
 
-QmlDownload::Status QmlDownload::status() const { return m_status; }
+DownloadProxy::Status DownloadProxy::status() const { return m_status; }

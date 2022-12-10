@@ -13,8 +13,8 @@ qt_add_executable(appWeatherstationGUI
     src/application.cpp
     src/panomaximageprovider.h
     src/panomaximageprovider.cpp
-    src/qmldownload.h
-    src/qmldownload.cpp
+    src/downloadproxy.h
+    src/downloadproxy.cpp
 )
 
 qt_add_qml_module(appWeatherstationGUI

@@ -1,12 +1,12 @@
-#ifndef QMLDOWNLOAD_H
-#define QMLDOWNLOAD_H
+#ifndef DOWNLOADPROXY_H
+#define DOWNLOADPROXY_H
 
 #include <QObject>
 #include <QQmlEngine>
 
 class QNetworkReply;
 
-class QmlDownload : public QObject {
+class DownloadProxy : public QObject {
     Q_PROPERTY(int id READ id CONSTANT)
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
@@ -16,7 +16,7 @@ class QmlDownload : public QObject {
     enum Status { None, Downloading, Finished, Failed };
     Q_ENUM(Status)
 
-    explicit QmlDownload(int id, QNetworkReply *networkReply, QObject *parent = nullptr);
+    explicit DownloadProxy(int id, QNetworkReply *networkReply, QObject *parent = nullptr);
 
     int id() const;
     qreal progress() const;
@@ -40,4 +40,4 @@ class QmlDownload : public QObject {
     void statusChanged();
 };
 
-#endif // QMLDOWNLOAD_H
+#endif // DOWNLOADPROXY_H
