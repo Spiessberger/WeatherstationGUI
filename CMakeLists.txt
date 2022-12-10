@@ -9,6 +9,12 @@ find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
 
 qt_add_executable(appWeatherstationGUI
     src/main.cpp
+    src/application.h
+    src/application.cpp
+    src/panomaximageprovider.h
+    src/panomaximageprovider.cpp
+    src/qmldownload.h
+    src/qmldownload.cpp
 )
 
 qt_add_qml_module(appWeatherstationGUI
@@ -17,11 +23,6 @@ qt_add_qml_module(appWeatherstationGUI
     QML_FILES
         qml/main.qml
         qml/ws2022/components/PanoramaView.qml
-    SOURCES
-        src/panomaximageprovider.h
-        src/panomaximageprovider.cpp
-        src/qmldownload.h
-        src/qmldownload.cpp
 )
 
 include_directories(src)
