@@ -37,6 +37,9 @@ QPixmap PanomaxImageProvider::requestPixmap(const QString &id, QSize *size,
 void PanomaxImageProvider::downloadLiveImage() {
     auto reply = m_netManager.get(QNetworkRequest(QUrl(m_baseUrl + "recent_default.jpg")));
 
+    if (m_liveImageDownload != nullptr && m_liveImageDownload->status() != QmlDownload::Finished) {
+        m_liveImageDownload->abort();
+    }
     m_liveImageDownload = std::make_unique<QmlDownload>(++m_id, reply, this);
     emit liveImageDownloadChanged();
     connect(reply, &QNetworkReply::finished, this,
@@ -53,6 +56,10 @@ void PanomaxImageProvider::downloadFinished(QmlDownload *download, QNetworkReply
 
     } else {
         qDebug() << "error downloading image:" << reply->errorString();
+        if (reply->error() != QNetworkReply::OperationCanceledError) {
+            qDebug() << "trying again...";
+            downloadLiveImage();
+        }
     }
 
     reply->deleteLater();
