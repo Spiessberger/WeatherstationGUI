@@ -18,7 +18,9 @@ static void dumpFileTree(const QDir &dir, int indent) {
 namespace wsgui {
 
 Application::Application(int argc, char *argv[])
-    : m_app(argc, argv), m_panomaxImageProvider(std::make_unique<PanomaxImageProvider>("", 10min)) {
+    : m_app(argc, argv),
+      m_panomaxImageProvider(std::make_unique<PanomaxImageProvider>("", 10min)),
+      m_system(std::make_unique<System>()) {
     const QUrl url(u"qrc:/WeatherstationGUI/qml/main.qml"_qs);
     QObject::connect(
         &m_qmlEngine, &QQmlApplicationEngine::objectCreated, &m_app,
@@ -31,6 +33,7 @@ Application::Application(int argc, char *argv[])
 
     // dumpFileTree({":"}, 0);
 
+    qmlRegisterSingletonInstance<System>("wsgui.System", 1, 0, "System", m_system.get());
     qmlRegisterSingletonInstance<PanomaxImageProvider>(
         "WeatherstationGUI", 1, 0, "PanomaxImageProvider", m_panomaxImageProvider.get());
     m_qmlEngine.addImageProvider("panomax", m_panomaxImageProvider.get());

@@ -5,6 +5,7 @@
 #include <QQmlApplicationEngine>
 
 #include "panomaximageprovider.h"
+#include "system.h"
 
 namespace wsgui {
 
@@ -18,6 +19,7 @@ class Application : public QObject {
     QGuiApplication m_app;
     QQmlApplicationEngine m_qmlEngine;
     std::unique_ptr<PanomaxImageProvider> m_panomaxImageProvider;
+    std::unique_ptr<System> m_system;
 };
 
 } // namespace wsgui

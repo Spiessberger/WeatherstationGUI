@@ -1,5 +1,6 @@
 import QtQuick
 import WeatherstationGUI
+import wsgui.System
 
 Window {
     width: 640
@@ -19,6 +20,16 @@ Window {
 
         function onProgressChanged() {
             console.log(PanomaxImageProvider.liveImageDownload.progress)
+        }
+    }
+
+    Column {
+        property var locale: Qt.locale()
+        Text {
+            text: System.time.toLocaleString(parent.locale, "HH:mm:ss")
+        }
+        Text {
+            text: System.date.toLocaleString(parent.locale, "dd.MM.yyyy")
         }
     }
 }
