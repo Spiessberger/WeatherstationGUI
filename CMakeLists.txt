@@ -32,6 +32,7 @@ qt_add_executable(appWeatherstationGUI
     src/data/weatherdatamanager.cpp
 
     qml/qml.qrc
+    resources/resources.qrc
 )
 
 include_directories(src)

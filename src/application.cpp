@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QDir>
+#include <QFontDatabase>
 
 #include "data/weatherdatamanager.h"
 
@@ -40,6 +41,11 @@ Application::Application(int argc, char *argv[])
     m_qmlEngine.addImageProvider("panomax", m_panomaxImageProvider.get());
 
     wsgui::data::initWeatherDataManager("mock_data_providers.json");
+
+    auto fonts = QFontDatabase::applicationFontFamilies(
+        QFontDatabase::addApplicationFont(":/Roboto-Regular.ttf"));
+    Q_ASSERT(fonts.size() == 1);
+    m_app.setFont({fonts.front()});
 
     m_qmlEngine.load(url);
 }
