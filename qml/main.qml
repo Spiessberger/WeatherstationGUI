@@ -1,8 +1,8 @@
 import QtQuick
 
-import ws2022.components
-import wsgui.System
+import wsgui.components
 import wsgui.data
+import wsgui.System
 import wsgui.PanomaxImageProvider
 
 Window {

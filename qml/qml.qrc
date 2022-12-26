@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>ws2022/components/PanoramaView.qml</file>
-        <file>ws2022/components/qmldir</file>
+        <file>wsgui/components/PanoramaView.qml</file>
+        <file>wsgui/components/qmldir</file>
     </qresource>
 </RCC>
