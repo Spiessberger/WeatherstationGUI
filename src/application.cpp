@@ -20,8 +20,8 @@ static void dumpFileTree(const QDir &dir, int indent) {
 
 namespace wsgui {
 
-Application::Application(int argc, char *argv[])
-    : m_app(argc, argv), m_panomaxImageProvider(std::make_unique<PanomaxImageProvider>("683", 10s)),
+Application::Application(QGuiApplication &app)
+    : m_app(app), m_panomaxImageProvider(new PanomaxImageProvider("683", 10s)),
       m_system(std::make_unique<System>()) {
     const QUrl url("qrc:/main.qml");
     QObject::connect(
@@ -37,8 +37,9 @@ Application::Application(int argc, char *argv[])
 
     qmlRegisterSingletonInstance<System>("wsgui.System", 1, 0, "System", m_system.get());
     qmlRegisterSingletonInstance<PanomaxImageProvider>(
-        "wsgui.PanomaxImageProvider", 1, 0, "PanomaxImageProvider", m_panomaxImageProvider.get());
-    m_qmlEngine.addImageProvider("panomax", m_panomaxImageProvider.get());
+        "wsgui.PanomaxImageProvider", 1, 0, "PanomaxImageProvider", m_panomaxImageProvider);
+    // QML Engine takes ownership of imageprovider
+    m_qmlEngine.addImageProvider("panomax", m_panomaxImageProvider);
 
     wsgui::data::initWeatherDataManager("mock_data_providers.json");
 
@@ -49,7 +50,5 @@ Application::Application(int argc, char *argv[])
 
     m_qmlEngine.load(url);
 }
-
-int Application::exec() { return m_app.exec(); }
 
 } // namespace wsgui

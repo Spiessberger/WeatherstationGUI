@@ -12,14 +12,13 @@ namespace wsgui {
 class Application : public QObject {
     Q_OBJECT
   public:
-    Application(int argc, char *argv[]);
-    int exec();
+    Application(QGuiApplication &app);
 
   private:
-    QGuiApplication m_app;
+    QGuiApplication &m_app;
     QQmlApplicationEngine m_qmlEngine;
-    std::unique_ptr<PanomaxImageProvider> m_panomaxImageProvider;
     std::unique_ptr<System> m_system;
+    PanomaxImageProvider *m_panomaxImageProvider;
 };
 
 } // namespace wsgui

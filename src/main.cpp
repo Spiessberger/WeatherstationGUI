@@ -1,7 +1,7 @@
 #include "application.h"
 
 int main(int argc, char *argv[]) {
-    wsgui::Application app(argc, argv);
-
+    QGuiApplication app(argc, argv);
+    wsgui::Application wsgui(app);
     return app.exec();
 }
