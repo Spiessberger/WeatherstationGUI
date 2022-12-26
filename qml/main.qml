@@ -1,7 +1,9 @@
 import QtQuick
-import WeatherstationGUI
+
+import ws2022.components
 import wsgui.System
 import wsgui.data
+import wsgui.PanomaxImageProvider
 
 Window {
     id: root

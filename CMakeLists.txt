@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(WeatherstationGUI VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
@@ -29,14 +30,8 @@ qt_add_executable(appWeatherstationGUI
     src/data/qmlweatherdata.cpp
     src/data/weatherdatamanager.h
     src/data/weatherdatamanager.cpp
-)
 
-qt_add_qml_module(appWeatherstationGUI
-    URI WeatherstationGUI
-    VERSION 1.0
-    QML_FILES
-        qml/main.qml
-        qml/ws2022/components/PanoramaView.qml
+    qml/qml.qrc
 )
 
 include_directories(src)

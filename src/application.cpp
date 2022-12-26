@@ -22,7 +22,7 @@ namespace wsgui {
 Application::Application(int argc, char *argv[])
     : m_app(argc, argv), m_panomaxImageProvider(std::make_unique<PanomaxImageProvider>("683", 10s)),
       m_system(std::make_unique<System>()) {
-    const QUrl url(u"qrc:/WeatherstationGUI/qml/main.qml"_qs);
+    const QUrl url("qrc:/main.qml");
     QObject::connect(
         &m_qmlEngine, &QQmlApplicationEngine::objectCreated, &m_app,
         [url](QObject *obj, const QUrl &objUrl) {
@@ -30,13 +30,13 @@ Application::Application(int argc, char *argv[])
                 QCoreApplication::exit(-1);
         },
         Qt::QueuedConnection);
-    m_qmlEngine.addImportPath(":/WeatherstationGUI/qml");
+    m_qmlEngine.addImportPath(":");
 
     // dumpFileTree({":"}, 0);
 
     qmlRegisterSingletonInstance<System>("wsgui.System", 1, 0, "System", m_system.get());
     qmlRegisterSingletonInstance<PanomaxImageProvider>(
-        "WeatherstationGUI", 1, 0, "PanomaxImageProvider", m_panomaxImageProvider.get());
+        "wsgui.PanomaxImageProvider", 1, 0, "PanomaxImageProvider", m_panomaxImageProvider.get());
     m_qmlEngine.addImageProvider("panomax", m_panomaxImageProvider.get());
 
     wsgui::data::initWeatherDataManager("mock_data_providers.json");
