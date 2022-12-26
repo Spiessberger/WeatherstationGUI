@@ -38,10 +38,11 @@ void PanomaxImageProvider::downloadLiveImage() {
     qDebug() << "downloading live image...";
     auto reply = m_netManager.get(QNetworkRequest(QUrl(m_baseUrl + "recent_default.jpg")));
 
-    if (m_liveImageDownload != nullptr && m_liveImageDownload->status() != DownloadProxy::Finished) {
+    if (m_liveImageDownload != nullptr &&
+        m_liveImageDownload->status() != DownloadProxy::Finished) {
         m_liveImageDownload->abort();
     }
-    m_liveImageDownload = std::make_unique<DownloadProxy>(++m_id, reply, this);
+    m_liveImageDownload = std::make_unique<DownloadProxy>(reply, this);
     emit liveImageDownloadChanged();
     connect(reply, &QNetworkReply::finished, this,
             [=]() { downloadFinished(m_liveImageDownload.get(), reply); });
@@ -54,6 +55,10 @@ void PanomaxImageProvider::downloadFinished(DownloadProxy *download, QNetworkRep
         m_liveImage.loadFromData(reply->readAll());
         m_liveImageId = download->id();
         emit liveImageIdChanged();
+        if (!m_liveImageAvailable) {
+            m_liveImageAvailable = true;
+            emit liveImageAvailableChanged();
+        }
 
     } else {
         qDebug() << "error downloading image:" << reply->errorString();
@@ -69,3 +74,5 @@ void PanomaxImageProvider::downloadFinished(DownloadProxy *download, QNetworkRep
 size_t PanomaxImageProvider::liveImageId() const { return m_liveImageId; }
 
 DownloadProxy *PanomaxImageProvider::liveImageDownload() const { return m_liveImageDownload.get(); }
+
+bool PanomaxImageProvider::liveImageAvailable() const { return m_liveImageAvailable; }

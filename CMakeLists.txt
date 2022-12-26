@@ -17,6 +17,18 @@ qt_add_executable(appWeatherstationGUI
     src/downloadproxy.cpp
     src/system.h
     src/system.cpp
+    src/data/weatherdataprovider.h
+    src/data/weatherdataprovider.cpp
+    src/data/mockweatherdataprovider.h
+    src/data/mockweatherdataprovider.cpp
+    src/data/i2cweatherdataprovider.h
+    src/data/i2cweatherdataprovider.cpp
+    src/data/mqttweatherdataprovider.h
+    src/data/mqttweatherdataprovider.cpp
+    src/data/qmlweatherdata.h
+    src/data/qmlweatherdata.cpp
+    src/data/weatherdatamanager.h
+    src/data/weatherdatamanager.cpp
 )
 
 qt_add_qml_module(appWeatherstationGUI

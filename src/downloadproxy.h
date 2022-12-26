@@ -7,7 +7,7 @@
 class QNetworkReply;
 
 class DownloadProxy : public QObject {
-    Q_PROPERTY(int id READ id CONSTANT)
+    Q_PROPERTY(size_t id READ id CONSTANT)
     Q_PROPERTY(qreal progress READ progress NOTIFY progressChanged)
     Q_PROPERTY(Status status READ status NOTIFY statusChanged)
 
@@ -16,9 +16,9 @@ class DownloadProxy : public QObject {
     enum Status { None, Downloading, Finished, Failed };
     Q_ENUM(Status)
 
-    explicit DownloadProxy(int id, QNetworkReply *networkReply, QObject *parent = nullptr);
+    explicit DownloadProxy(QNetworkReply *networkReply, QObject *parent = nullptr);
 
-    int id() const;
+    size_t id() const;
     qreal progress() const;
     Status status() const;
 
@@ -26,7 +26,8 @@ class DownloadProxy : public QObject {
     void abort();
 
   private:
-    int m_id;
+    static size_t s_id;
+    size_t m_id;
     qreal m_progress = 0.0;
     Status m_status = Status::None;
     QPointer<QNetworkReply> m_networkReply;

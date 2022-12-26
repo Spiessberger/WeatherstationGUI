@@ -12,8 +12,10 @@ void initQml() {
 Q_CONSTRUCTOR_FUNCTION(initQml);
 } // namespace
 
-DownloadProxy::DownloadProxy(int id, QNetworkReply *networkReply, QObject *parent)
-    : QObject{parent}, m_id(id), m_networkReply(networkReply) {
+size_t DownloadProxy::s_id = 0;
+
+DownloadProxy::DownloadProxy(QNetworkReply *networkReply, QObject *parent)
+    : QObject{parent}, m_id(s_id++), m_networkReply(networkReply) {
     Q_ASSERT(networkReply != nullptr);
     Q_ASSERT(networkReply->operation() == QNetworkAccessManager::GetOperation);
     connect(networkReply, &QNetworkReply::downloadProgress, this, &DownloadProxy::downloadProgress);
@@ -34,7 +36,7 @@ DownloadProxy::DownloadProxy(int id, QNetworkReply *networkReply, QObject *paren
     }
 }
 
-int DownloadProxy::id() const { return m_id; }
+size_t DownloadProxy::id() const { return m_id; }
 
 qreal DownloadProxy::progress() const { return m_progress; }
 
