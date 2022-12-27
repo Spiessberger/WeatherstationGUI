@@ -6,6 +6,7 @@
 #include <QJsonObject>
 
 #include "mockweatherdataprovider.h"
+#include "mqttweatherdataprovider.h"
 
 namespace wsgui {
 namespace data {
@@ -82,8 +83,15 @@ bool WeatherDataManager::parseConfig(const QString &configFile) {
         if (providerType == "MOCK") {
             provider = std::make_shared<MockWeatherDataProvider>(
                 unit, providerInfo["minVal"].toDouble(0), providerInfo["maxVal"].toDouble(0));
-        } else if (providerType == "I2C") {
         } else if (providerType == "MQTT") {
+            if (m_mqttClient == nullptr) {
+                m_mqttClient = std::make_shared<QMqttClient>();
+                m_mqttClient->setPort(1883);
+                m_mqttClient->setHostname("localhost");
+                m_mqttClient->connectToHost();
+            }
+            provider = std::make_shared<MqttWeatherDataProvider>(
+                unit, providerInfo["topic"].toString(), m_mqttClient);
         } else {
             qWarning() << "unknown weather data provider type:" << providerType;
         }

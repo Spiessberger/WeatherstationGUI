@@ -26,7 +26,7 @@ Rectangle {
         Text {
             id: value
 
-            text: weatherData.value ? weatherData.value.toFixed(1) : ""
+            text: weatherData.value !== undefined ? weatherData.value.toFixed(1) : "-"
             color: "#2C3E50"
             font.pixelSize: 80
         }

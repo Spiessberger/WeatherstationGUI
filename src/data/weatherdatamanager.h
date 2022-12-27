@@ -1,6 +1,7 @@
 #ifndef WEATHERDATAMANAGER_H
 #define WEATHERDATAMANAGER_H
 
+#include <QMqttClient>
 #include <QObject>
 
 #include "weatherdataprovider.h"
@@ -23,6 +24,7 @@ class WeatherDataManager : public QObject {
   private:
     bool parseConfig(const QString &configFile);
 
+    std::shared_ptr<QMqttClient> m_mqttClient;
     std::unordered_map<QString, std::shared_ptr<WeatherDataProvider>> m_dataProviders;
 };
 

@@ -6,7 +6,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
+find_package(Qt6 6.2 COMPONENTS Quick Mqtt REQUIRED)
 
 qt_add_executable(appWeatherstationGUI
     src/main.cpp
@@ -38,7 +38,10 @@ qt_add_executable(appWeatherstationGUI
 include_directories(src)
 
 target_link_libraries(appWeatherstationGUI
-    PRIVATE Qt6::Quick)
+    PRIVATE
+        Qt6::Quick
+        Qt6::Mqtt
+    )
 
 install(TARGETS appWeatherstationGUI
     BUNDLE DESTINATION .

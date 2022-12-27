@@ -3,14 +3,26 @@
 
 #include "weatherdataprovider.h"
 
+#include <QMqttClient>
+#include <QPointer>
+
 namespace wsgui {
 namespace data {
 
-class MqttWeatherDataProvider : public wsgui::data::WeatherDataProvider
-{
+class MqttWeatherDataProvider : public wsgui::data::WeatherDataProvider {
     Q_OBJECT
-public:
-    explicit MqttWeatherDataProvider(QObject *parent = nullptr);
+  public:
+    explicit MqttWeatherDataProvider(const QString &unit, const QString &topic,
+                                     std::shared_ptr<QMqttClient> mqttClient,
+                                     QObject *parent = nullptr);
+
+  private:
+    void subscribeTopic();
+    void messageReceived(const QMqttMessage &msg);
+
+    QString m_topic;
+    std::shared_ptr<QMqttClient> m_mqttClient;
+    QPointer<QMqttSubscription> m_sub;
 };
 
 } // namespace data
