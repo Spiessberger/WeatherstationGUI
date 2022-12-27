@@ -21,7 +21,7 @@ static void dumpFileTree(const QDir &dir, int indent) {
 namespace wsgui {
 
 Application::Application(QGuiApplication &app)
-    : m_app(app), m_panomaxImageProvider(new PanomaxImageProvider("683", 10s)),
+    : m_app(app), m_panomaxImageProvider(new PanomaxImageProvider("683", 10min)),
       m_system(std::make_unique<System>()) {
     const QUrl url("qrc:/main.qml");
     QObject::connect(
@@ -41,7 +41,7 @@ Application::Application(QGuiApplication &app)
     // QML Engine takes ownership of imageprovider
     m_qmlEngine.addImageProvider("panomax", m_panomaxImageProvider);
 
-    wsgui::data::initWeatherDataManager("mock_data_providers.json");
+    wsgui::data::initWeatherDataManager("mqtt_data_providers.json");
 
     auto fonts = QFontDatabase::applicationFontFamilies(
         QFontDatabase::addApplicationFont(":/Roboto-Regular.ttf"));

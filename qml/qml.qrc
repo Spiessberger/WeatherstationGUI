@@ -3,5 +3,6 @@
         <file>main.qml</file>
         <file>wsgui/components/PanoramaView.qml</file>
         <file>wsgui/components/qmldir</file>
+        <file>wsgui/components/WeatherDataDisplay.qml</file>
     </qresource>
 </RCC>

@@ -8,8 +8,8 @@ import wsgui.PanomaxImageProvider
 Window {
     id: root
 
-    width: 640
-    height: 480
+    width: 1280
+    height: 800
     visible: true
     title: qsTr("Hello World")
 
@@ -20,77 +20,78 @@ Window {
                          "image://panomax/" + PanomaxImageProvider.liveImageId : ""
     }
 
-    Rectangle {
-        anchors.fill: leftCol
-        anchors.margins: -5
-        color: "#80FFFFFF"
-        radius: 4
-        border.width: 1
-    }
-
     Column {
-        id: leftCol
+        id: dateTimeCol
+
+        property var locale: Qt.locale("de")
 
         anchors.left: parent.left
-        anchors.verticalCenter: parent.verticalCenter
+        anchors.top: parent.top
+        anchors.margins: 10
 
-        property var locale: Qt.locale()
-        Text {
-            text: System.time.toLocaleString(parent.locale, "HH:mm:ss")
-        }
-        Text {
-            text: System.date.toLocaleString(parent.locale, "dd.MM.yyyy")
-        }
+        spacing: -30
 
         Text {
-            text: tempInside.value ? tempInside.value.toFixed(2) + " " + tempInside.unit : ""
+            id: time
 
-            WeatherData {
-                id: tempInside
-                type: "TEMP_INSIDE"
-            }
+            text: System.time.toLocaleString(parent.locale, "HH:mm")
+            color: "#2C3E50"
+            font.pixelSize: 150
+            style: Text.Outline
+            styleColor: "#A0ECF0F1"
         }
-
         Text {
-            text: humInside.value ? humInside.value.toFixed(2) + " " + humInside.unit : ""
+            anchors.left: parent.left
+            anchors.leftMargin: 5
 
-            WeatherData {
-                id: humInside
-                type: "HUMIDITY_INSIDE"
-            }
+            width: time.width
+
+            text: System.date.toLocaleString(parent.locale, "ddd dd.MM.yyyy")
+            color: "#2C3E50"
+            font.pixelSize: 60
+            style: Text.Outline
+            styleColor: "#A0ECF0F1"
+            fontSizeMode: Text.HorizontalFit
         }
-    }
-
-    Rectangle {
-        anchors.fill: rightCol
-        anchors.margins: -5
-        color: "#80FFFFFF"
-        radius: 4
-        border.width: 1
     }
 
     Column {
-        id: rightCol
-
-        anchors.right: parent.right
+        anchors.left: parent.left
+        anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
 
-        Text {
-            text: tempOutside.value ? tempOutside.value.toFixed(2) + " " + tempOutside.unit : ""
+        spacing: 5
 
-            WeatherData {
-                id: tempOutside
-                type: "TEMP_OUTSIDE"
-            }
+        WeatherDataDisplay {
+            weatherDataType: "TEMP_INSIDE"
         }
 
-        Text {
-            text: humOutside.value ? humOutside.value.toFixed(2) + " " + humOutside.unit : ""
+        WeatherDataDisplay {
+            weatherDataType: "HUMIDITY_INSIDE"
+        }
+    }
 
-            WeatherData {
-                id: humOutside
-                type: "HUMIDITY_OUTSIDE"
-            }
+    Column {
+        anchors.right: parent.right
+        anchors.rightMargin: 10
+        anchors.verticalCenter: parent.verticalCenter
+
+        spacing: 5
+
+        WeatherDataDisplay {
+            weatherDataType: "WIND_SPEED"
+        }
+
+        WeatherDataDisplay {
+            weatherDataType: "WIND_GUST"
+        }
+
+        WeatherDataDisplay {
+            weatherDataType: "TEMP_OUTSIDE"
+        }
+
+        WeatherDataDisplay {
+            weatherDataType: "HUMIDITY_OUTSIDE"
         }
     }
 }
