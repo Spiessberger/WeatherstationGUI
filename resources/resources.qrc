@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>Roboto-Regular.ttf</file>
+        <file>icons/location-arrow-solid.svg</file>
     </qresource>
 </RCC>

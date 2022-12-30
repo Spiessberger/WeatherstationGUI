@@ -4,5 +4,6 @@
         <file>wsgui/components/PanoramaView.qml</file>
         <file>wsgui/components/qmldir</file>
         <file>wsgui/components/WeatherDataDisplay.qml</file>
+        <file>wsgui/components/WindDirectionDisplay.qml</file>
     </qresource>
 </RCC>

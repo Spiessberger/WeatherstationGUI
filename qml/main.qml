@@ -78,6 +78,18 @@ Window {
 
         spacing: 5
 
+        WindDirectionDisplay {
+            width: 200
+            height: width
+
+            direction: windDirectionData.value !== undefined ? windDirectionData.value : 0
+
+            WeatherData {
+                id: windDirectionData
+                type: "WIND_DIRECTION"
+            }
+        }
+
         WeatherDataDisplay {
             weatherDataType: "WIND_SPEED"
         }

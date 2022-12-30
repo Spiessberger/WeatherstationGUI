@@ -2,3 +2,4 @@ module wsgui.components
 
 PanoramaView 1.0 PanoramaView.qml
 WeatherDataDisplay 1.0 WeatherDataDisplay.qml
+WindDirectionDisplay 1.0 WindDirectionDisplay.qml
