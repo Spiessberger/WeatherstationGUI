@@ -15,7 +15,11 @@ Item {
         id: scrollingTimer
 
         interval: 2000
-        onTriggered: console.log("triggered")
+        onTriggered: {
+            if (!scrollingAnimation.running) {
+                d.startScrollingAnimation(false)
+            }
+        }
     }
 
     Flickable {
@@ -81,12 +85,12 @@ Item {
                     fillMode: Image.PreserveAspectFit
                 }
 
-                Rectangle {
-                    anchors.right: parent.right
-                    height: parent.height
-                    width: 2
-                    color: "red"
-                }
+//                Rectangle {
+//                    anchors.right: parent.right
+//                    height: parent.height
+//                    width: 2
+//                    color: "red"
+//                }
             }
 
             Image {
